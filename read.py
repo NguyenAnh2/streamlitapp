@@ -29,7 +29,7 @@ def create_dag(config, name_dag):
             if 'config' in st.session_state:
                 config_create_dag = json.loads(st.session_state.config)
                 # URL để trigger DAG
-                trigger_url = f"http://localhost:8080/api/v1/dags/CREATE_DAG/dagRuns"
+                trigger_url = f"http://172.28.136.105:8080/api/v1/dags/CREATE_DAG/dagRuns"
                 
                 with st.spinner("Đang tạo DAG, vui lòng chờ..."):
                     response = api_request('POST', trigger_url, json={'conf': {'config': config_create_dag, 'name': name_dag}})
@@ -47,7 +47,7 @@ def create_dag(config, name_dag):
                         st.session_state.dag_created = False
 
 def check_dag_run_status(dag_run_id):
-    check_url = f"http://localhost:8080/api/v1/dags/CREATE_DAG/dagRuns/{dag_run_id}"
+    check_url = f"http://172.28.136.105:8080/api/v1/dags/CREATE_DAG/dagRuns/{dag_run_id}"
     
     with st.spinner("Đang kiểm tra trạng thái DAG..."):
         while True:
@@ -75,11 +75,11 @@ def run_dag(name_dag):
             st.error("DAG không sẵn sàng để chạy.")
             return
         
-        trigger_url = f"http://localhost:8080/api/v1/dags/{name_dag}/dagRuns"
+        trigger_url = f"http://172.28.136.105:8080/api/v1/dags/{name_dag}/dagRuns"
         
         auth = HTTPBasicAuth('admin', 'KQXMuEEpxthWmk75')
         
-        csrf_url = f"http://localhost:8080/api/v1/dags/{name_dag}"
+        csrf_url = f"http://172.28.136.105:8080/api/v1/dags/{name_dag}"
         csrf_token = get_csrf_token()  
 
         headers = {
@@ -97,7 +97,7 @@ def run_dag(name_dag):
                 st.success("Đang chạy DAG! Đang kiểm tra kết quả...")
 
                 # Kiểm tra trạng thái của DAG
-                check_url = f"http://localhost:8080/api/v1/dags/{name_dag}/dagRuns/{dag_run_id}"
+                check_url = f"http://172.28.136.105:8080/api/v1/dags/{name_dag}/dagRuns/{dag_run_id}"
                 while True:
                     result_response = requests.get(check_url, headers=headers, auth=auth)
                     if result_response.status_code == 200:
