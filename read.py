@@ -11,7 +11,7 @@ from requests.auth import HTTPBasicAuth
 def get_csrf_token():
     csrf_url = "http://172.28.136.105:8080/api/v1/dags/CREATE_DAG"
     auth = HTTPBasicAuth('admin', 'KQXMuEEpxthWmk75')
-    response = requests.get(csrf_url, auth=auth)
+    response = requests.get(csrf_url, auth=auth, timeout=60)
     return response.headers.get("X-CSRF-Token")
 
 def api_request(method, url, json=None):
@@ -216,53 +216,7 @@ def log_config():
                         st.write("Các cột được chọn làm key:", st.session_state.key_selections)
                     else:
                         st.warning("Không có cột nào được ánh xạ.")
-
-                # isLookup = st.radio("Bạn có muốn tạo lookup không?", ("Có", "Không"))
-                # if isLookup == "Có":
-                #     # Bổ sung phần lookup nhiều cột vào cơ sở dữ liệu
-                #     st.write("### Lookup dữ liệu từ cơ sở dữ liệu")
-                #     lookup_columns = st.multiselect("Chọn các cột để lookup tới cơ sở dữ liệu:", column_names)
-                    
-                #     if lookup_columns:
-                #         # Kiểm tra xem session_state đã có 'lookup_info' chưa, nếu chưa thì tạo mới
-                #         if 'lookup_info' not in st.session_state:
-                #             st.session_state.lookup_info = {}
-
-                #         # Dictionary để lưu thông tin bảng và cột trong cơ sở dữ liệu tương ứng với từng cột Excel
-                #         lookup_info = st.session_state.lookup_info
-
-                #         for col in lookup_columns:
-                #             st.write(f"### Thiết lập lookup cho cột '{col}'")
-                #             db_table = st.text_input(f"Nhập tên bảng cơ sở dữ liệu cho cột '{col}':", key=f"db_table_{col}")
-                #             db_lookup_column = st.text_input(f"Nhập tên cột trong bảng {db_table} để đối chiếu với cột '{col}' trong Excel:", key=f"db_lookup_column_{col}")
-                #             db_column_get = st.text_input(f"Nhập tên cột bạn muốn lấy thông tin tương ứng các hàng với cột {db_lookup_column}", key=f"db_column_get_{col}")
-                            
-                #             # Lưu thông tin về bảng và cột tương ứng cho cột Excel này vào session_state
-                #             lookup_info[col] = {
-                #                 'db_table': db_table,
-                #                 'db_lookup_column': db_lookup_column,
-                #                 'db_column_get': db_column_get
-                #             }
-                            
-                #         lookup_submit_button = st.button("Lưu thông tin")
-
-                #         # Nếu người dùng nhấn nút "Lưu thông tin"
-                #         if lookup_submit_button:
-                #             st.session_state.lookup_info = lookup_info  # Cập nhật lại vào session_state
-
-                #     # Luôn hiển thị lại thông tin đã lưu từ session_state
-                #     if 'lookup_info' in st.session_state and st.session_state.lookup_info:
-                #         st.write("Thông tin lookup đã nhập:")
-                #         for col, info in st.session_state.lookup_info.items():
-                #             st.write(f"Cột trong Excel: '{col}' - Bảng cơ sở dữ liệu: '{info['db_table']}' - Ánh xạ tới cột trong bảng: '{info['db_lookup_column']}' - Cột dữ liệu lấy thông tin tương ứng: {info['db_column_get']}")
-                            
-                #     lookup_info_items = list(st.session_state.lookup_info.items())
-
-                # st.write("### Nhập thông tin database đích: ")
-                
-                # if lookup_info_items:
-                #     config = LogConfigExcel(uploaded_file, selected_sheet, data_types, column_mapping, header_input, st.session_state.key_selections, lookup_info_items, 'xlsx')
-                # else:
+                        
                 config = LogConfigExcel(file_path, selected_sheet, data_types, column_mapping, header_input, st.session_state.key_selections, '', 'xlsx')
                 
                 create_dag(config=config, name_dag=name_dag)
