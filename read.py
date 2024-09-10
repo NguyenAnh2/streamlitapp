@@ -9,7 +9,7 @@ from logconfig import LogConfigSQL, LogConfigExcel
 from requests.auth import HTTPBasicAuth
 
 def get_csrf_token():
-    csrf_url = "http://localhost:8080/api/v1/dags/CREATE_DAG"
+    csrf_url = "http://172.28.136.105:8080/api/v1/dags/CREATE_DAG"
     auth = HTTPBasicAuth('admin', 'KQXMuEEpxthWmk75')
     response = requests.get(csrf_url, auth=auth)
     return response.headers.get("X-CSRF-Token")
