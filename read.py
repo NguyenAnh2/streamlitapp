@@ -13,9 +13,14 @@ def get_csrf_token():
         csrf_url = "http://172.28.136.105:8080/api/v1/dags/CREATE_DAG"
         auth = HTTPBasicAuth('admin', 'KQXMuEEpxthWmk75')
         response = requests.get(csrf_url, auth=auth, timeout=60)
+        if response.status_code == 200:
+            return response.headers.get("X-CSRF-Token")
+        else:
+            st.error(f"Failed to get CSRF token. Status code: {response.status_code}, Response: {response.text}")
+            return None
     except Exception as e:
         st.error(f"An unexpected error occurred: {e}")
-    return response.headers.get("X-CSRF-Token")
+        return None
 
 def api_request(method, url, json=None):
     headers = {
