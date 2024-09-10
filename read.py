@@ -2,7 +2,6 @@ import json
 import time
 import streamlit as st
 import pandas as pd
-import pyodbc
 import os
 from sqlalchemy import create_engine
 import requests
