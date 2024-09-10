@@ -12,7 +12,8 @@ def get_csrf_token():
     try:
         csrf_url = "http://172.28.136.105:8080/api/v1/dags/CREATE_DAG"
         auth = HTTPBasicAuth('admin', 'KQXMuEEpxthWmk75')
-        response = requests.get(csrf_url, auth=auth, timeout=10)
+        response = requests.get(csrf_url, auth=auth)
+        st.write(response.status_code)
         if response.status_code == 200:
             return response.headers.get("X-CSRF-Token")
         else:
